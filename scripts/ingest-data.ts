@@ -3,8 +3,17 @@ import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { pinecone } from '@/utils/pinecone-client';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
+import { CustomPDFLoader } from '@/utils/customPDFLoader';
 import { PINECONE_INDEX_NAME, PINECONE_NAME_SPACE } from '@/config/pinecone';
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory';
+import {
+  JSONLoader,
+  JSONLinesLoader,
+} from "langchain/document_loaders/fs/json";
+import { TextLoader } from "langchain/document_loaders/fs/text";
+import { CSVLoader } from "langchain/document_loaders/fs/csv";
+import { DocxLoader } from "langchain/document_loaders/fs/docx";
+import { UnstructuredHTMLLoader } from "langchain/document_loaders/fs/html";
 
 /* Name of directory to retrieve your files from 
    Make sure to add your PDF files inside the 'docs' folder
@@ -13,9 +22,15 @@ const filePath = 'docs';
 
 export const run = async () => {
   try {
-    /*load raw docs from the all files in the directory */
+    /* load all docs from the all files in the directory */
     const directoryLoader = new DirectoryLoader(filePath, {
-      '.pdf': (path) => new PDFLoader(path),
+      '.pdf': (path) => new CustomPDFLoader(path),
+      '.docx': (path) => new DocxLoader(path),
+      '.json': (path) => new JSONLoader(path, "/texts"),
+      '.jsonl': (path) => new JSONLinesLoader(path, "/html"),
+      '.txt': (path) => new TextLoader(path),
+      '.csv': (path) => new CSVLoader(path, "text"),
+      '.html': (path) => new UnstructuredHTMLLoader(path),
     });
 
     // const loader = new PDFLoader(filePath);

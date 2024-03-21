@@ -66,6 +66,18 @@ PINECONE_INDEX_NAME=
 
 3. Check Pinecone dashboard to verify your namespace and vectors have been added.
 
+## Docker with Docker Compose
+
+**Training the Model**
+```
+docker-compose build train
+```
+
+**Running Web**
+```
+docker-compose build web && docker-compose up web
+```
+
 ## Run the app
 
 Once you've verified that the embeddings and content have been successfully added to your Pinecone, you can run the app `npm run dev` to launch the local dev environment, and then type a question in the chat interface.
